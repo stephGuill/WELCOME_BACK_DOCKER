@@ -1,0 +1,6 @@
+app/vendor/
+app/var/
+app/.env.local
+app/.phpunit.result.cache
+app/node_modules/
+Screenshot/

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion Admin{% endblock %}
+
+{% block body %}
+<div class="page">
+    <header class="topbar">
+        <div class="brand">UNIT_SYMFONY</div>
+        <nav class="menu">
+            <a href="{{ path('app_home') }}">Accueil</a>
+            <a href="{{ path('app_login_user') }}">Connexion User</a>
+        </nav>
+    </header>
+
+    <main class="auth-page">
+        <span class="badge badge-admin">ROLE_ADMIN</span>
+        <h1>Connexion Administrateur</h1>
+        <p>Utilisez un compte ayant le role administrateur pour acceder a l espace d administration.</p>
+
+        {% if error %}
+            <div class="flash-error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form class="auth-form" method="post" action="{{ path('app_login_admin') }}">
+            <label>
+                Adresse e-mail
+                <input type="email" name="email" value="{{ last_username }}" required autofocus>
+            </label>
+            <label>
+                Mot de passe
+                <input type="password" name="password" required>
+            </label>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button type="submit">Se connecter en admin</button>
+        </form>
+
+        <div class="login-hint">
+            <strong>Compte de test :</strong> admin@unit.local / Admin1234!
+        </div>
+    </main>
+</div>
+{% endblock %}

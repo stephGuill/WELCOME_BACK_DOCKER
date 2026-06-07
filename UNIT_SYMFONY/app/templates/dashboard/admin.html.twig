@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace Admin{% endblock %}
+
+{% block body %}
+<div class="page">
+    <header class="topbar">
+        <div class="brand">UNIT_SYMFONY</div>
+        <nav class="menu">
+            <a href="{{ path('app_home') }}">Accueil</a>
+            <a href="{{ path('app_user_dashboard') }}">Espace User</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <span class="badge badge-admin">ROLE_ADMIN</span>
+        <h1>Espace Administrateur</h1>
+        <p>Vous etes connecte en tant qu administrateur. Cette page est protegee par ROLE_ADMIN.</p>
+        <p><strong>Utilisateur :</strong> {{ app.user.userIdentifier }}</p>
+        <form method="post" action="{{ path('app_logout') }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+            <button class="logout-btn" type="submit">Se deconnecter</button>
+        </form>
+    </main>
+</div>
+{% endblock %}

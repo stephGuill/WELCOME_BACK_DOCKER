@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace User{% endblock %}
+
+{% block body %}
+<div class="page">
+    <header class="topbar">
+        <div class="brand">UNIT_SYMFONY</div>
+        <nav class="menu">
+            <a href="{{ path('app_home') }}">Accueil</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin_dashboard') }}">Espace Admin</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="hero">
+        <span class="badge badge-user">ROLE_USER</span>
+        <h1>Espace Utilisateur</h1>
+        <p>Vous etes connecte sur la zone utilisateur protegee.</p>
+        <p><strong>Utilisateur :</strong> {{ app.user.userIdentifier }}</p>
+        <form method="post" action="{{ path('app_logout') }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+            <button class="logout-btn" type="submit">Se deconnecter</button>
+        </form>
+    </main>
+</div>
+{% endblock %}

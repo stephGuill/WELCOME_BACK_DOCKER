@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}UNIT_SYMFONY{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+            <style>
+                :root {
+                    --bg: #0b1220;
+                    --card: #ffffff;
+                    --text: #1f2937;
+                    --muted: #6b7280;
+                    --primary: #2563eb;
+                    --primary-dark: #1d4ed8;
+                }
+                * { box-sizing: border-box; }
+                body {
+                    margin: 0;
+                    font-family: "Segoe UI", Arial, sans-serif;
+                    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+                    color: var(--text);
+                }
+                .page {
+                    min-height: 100vh;
+                    padding: 24px;
+                }
+                .topbar {
+                    max-width: 1080px;
+                    margin: 0 auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: var(--card);
+                    border-radius: 14px;
+                    padding: 14px 20px;
+                    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+                }
+                .brand {
+                    font-weight: 800;
+                    letter-spacing: .03em;
+                    color: var(--primary-dark);
+                }
+                .menu {
+                    display: flex;
+                    gap: 12px;
+                }
+                .menu a {
+                    text-decoration: none;
+                    padding: 10px 14px;
+                    border-radius: 10px;
+                    background: var(--primary);
+                    color: #fff;
+                    font-weight: 600;
+                }
+                .menu a:hover {
+                    background: var(--primary-dark);
+                }
+                .menu form {
+                    margin: 0;
+                }
+                .hero, .auth-page {
+                    max-width: 1080px;
+                    margin: 18px auto 0;
+                    background: var(--card);
+                    border-radius: 14px;
+                    padding: 30px;
+                    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.08);
+                }
+                h1 { margin-top: 0; }
+                p { color: var(--muted); }
+                small { color: var(--muted); }
+                .badge {
+                    display: inline-block;
+                    margin-bottom: 12px;
+                    padding: 8px 12px;
+                    border-radius: 999px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: .08em;
+                }
+                .badge-admin {
+                    color: #991b1b;
+                    background: #fee2e2;
+                }
+                .badge-user {
+                    color: #1d4ed8;
+                    background: #dbeafe;
+                }
+                .auth-form {
+                    display: grid;
+                    gap: 14px;
+                    max-width: 460px;
+                    margin-top: 18px;
+                }
+                .auth-form label {
+                    display: grid;
+                    gap: 6px;
+                    font-weight: 600;
+                    color: var(--text);
+                }
+                .auth-form input {
+                    width: 100%;
+                    padding: 12px 14px;
+                    border: 1px solid #cbd5e1;
+                    border-radius: 10px;
+                    font-size: 15px;
+                }
+                .auth-form button,
+                .logout-btn {
+                    border: 0;
+                    border-radius: 10px;
+                    padding: 12px 16px;
+                    background: var(--primary);
+                    color: #fff;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+                .auth-form button:hover,
+                .logout-btn:hover {
+                    background: var(--primary-dark);
+                }
+                .login-hint,
+                .flash-error {
+                    margin-top: 14px;
+                    border-radius: 10px;
+                    padding: 12px 14px;
+                }
+                .login-hint {
+                    background: #eff6ff;
+                    color: #1e3a8a;
+                }
+                .flash-error {
+                    background: #fef2f2;
+                    color: #991b1b;
+                }
+                .auth-page a {
+                    display: inline-block;
+                    margin-top: 12px;
+                    color: var(--primary-dark);
+                    font-weight: 600;
+                }
+            </style>
+        {% endblock %}
+
+        {% block javascripts %}{% endblock %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - UNIT_SYMFONY{% endblock %}
+
+{% block body %}
+<div class="page">
+    <header class="topbar">
+        <div class="brand">UNIT_SYMFONY</div>
+        <nav class="menu">
+            {% if app.user %}
+                <a href="{{ path('app_user_dashboard') }}">Espace User</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_admin_dashboard') }}">Espace Admin</a>
+                {% endif %}
+                <form method="post" action="{{ path('app_logout') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    <button class="logout-btn" type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a href="{{ path('app_login_user') }}">Connexion User</a>
+                <a href="{{ path('app_login_admin') }}">Connexion Admin</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="hero">
+        <h1>{{ content.title }}</h1>
+        <p>{{ content.message }}</p>
+        <small>Dernière mise à jour : {{ content.updatedAt|date('d/m/Y H:i') }}</small>
+    </main>
+</div>
+{% endblock %}
