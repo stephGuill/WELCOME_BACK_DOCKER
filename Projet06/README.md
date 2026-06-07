@@ -50,9 +50,10 @@ docker stop projet06-apocalypse
 docker rm projet06-apocalypse
 ```
 
-## Captures (optionnel)
-Dépose tes captures dans `images/` puis ajoute-les ici, par exemple :
+## Captures réalisées
 
-```markdown
-![Dashboard apocalypse](./images/dashboard-apocalypse.png)
-```
+### Dockerfile du projet
+![Dockerfile Projet06](./images/Capture%20d'%C3%A9cran%20Dockerfile.png)
+
+### Interface Industrial Apocalypse en action
+![Industrial Apocalypse 1.0](./images/industrial_apoclypse1.0.png)

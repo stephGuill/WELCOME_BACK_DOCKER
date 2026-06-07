@@ -80,48 +80,58 @@
     </div>
 
     <script>
-        const boardEl = document.getElementById('board');
-        const statusEl = document.getElementById('status');
-        const resultsEl = document.getElementById('results');
+        // R\u00e9f\u00e9rences aux \u00e9l\u00e9ments HTML du DOM
+        const boardEl = document.getElementById('board');     // grille de jeu 3x3
+        const statusEl = document.getElementById('status');   // message de statut ("Tour du joueur X")
+        const resultsEl = document.getElementById('results'); // zone d'affichage du JSON
+
+        // \u00c9tat du jeu : tableau de 9 cases vides, joueur courant X, et flag fin de partie
         const cells = Array(9).fill('');
         let current = 'X';
         let gameOver = false;
 
+        // Les 8 combinaisons gagnantes (lignes, colonnes, diagonales)
         const wins = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
+            [0, 1, 2],  // ligne 1
+            [3, 4, 5],  // ligne 2
+            [6, 7, 8],  // ligne 3
+            [0, 3, 6],  // colonne 1
+            [1, 4, 7],  // colonne 2
+            [2, 5, 8],  // colonne 3
+            [0, 4, 8],  // diagonale principale
+            [2, 4, 6]   // diagonale anti
         ];
 
+        // Redessine le plateau HTML \u00e0 partir du tableau cells[]
         function render() {
             boardEl.innerHTML = '';
             cells.forEach((v, i) => {
                 const b = document.createElement('button');
                 b.className = 'cell';
-                b.textContent = v;
-                b.onclick = () => play(i);
+                b.textContent = v;                // 'X', 'O' ou vide
+                b.onclick = () => play(i);        // clic = jouer dans la case i
                 boardEl.appendChild(b);
             });
         }
 
+        // V\u00e9rifie si un joueur a gagn\u00e9 ou si c'est un match nul
+        // Retourne 'X', 'O', 'draw' ou null (partie en cours)
         function checkWinner() {
             for (const [a, b, c] of wins) {
+                // Trois cases identiques et non vides = victoire
                 if (cells[a] && cells[a] === cells[b] && cells[b] === cells[c]) return cells[a];
             }
+            // Toutes les cases remplies sans gagnant = match nul
             if (cells.every(Boolean)) return 'draw';
             return null;
         }
 
+        // Envoie le r\u00e9sultat \u00e0 save.php via POST (JSON), puis recharge results.json
         async function saveResult(winner) {
             const payload = {
                 winner,
-                playedAt: new Date().toISOString(),
-                board: [...cells]
+                playedAt: new Date().toISOString(), // horodatage ISO 8601
+                board: [...cells]                   // copie du plateau final
             };
             await fetch('/save.php', {
                 method: 'POST',
@@ -130,30 +140,36 @@
                 },
                 body: JSON.stringify(payload)
             });
+            // Recharger l'affichage du fichier JSON apr\u00e8s sauvegarde
             await loadResults();
         }
 
+        // R\u00e9cup\u00e8re results.json depuis le serveur et l'affiche formatt\u00e9 dans la page
+        // Le param\u00e8tre _= Date.now() force le navigateur \u00e0 ne pas utiliser le cache
         async function loadResults() {
             const r = await fetch('/results.json?_=' + Date.now());
             const data = await r.json();
             resultsEl.textContent = JSON.stringify(data, null, 2);
         }
 
+        // Logique principale : jouer dans la case i
         async function play(i) {
-            if (gameOver || cells[i]) return;
-            cells[i] = current;
+            if (gameOver || cells[i]) return; // case d\u00e9j\u00e0 jou\u00e9e ou partie termin\u00e9e
+            cells[i] = current;               // place le symbole du joueur courant
             render();
             const winner = checkWinner();
             if (winner) {
                 gameOver = true;
                 statusEl.textContent = winner === 'draw' ? 'Match nul' : `Gagnant : ${winner}`;
-                await saveResult(winner);
+                await saveResult(winner);     // sauvegarde dans results.json via PHP
                 return;
             }
+            // Alterne entre X et O
             current = current === 'X' ? 'O' : 'X';
             statusEl.textContent = `Tour du joueur ${current}`;
         }
 
+        // Remet le jeu \u00e0 z\u00e9ro sans effacer les r\u00e9sultats pass\u00e9s
         function resetGame() {
             cells.fill('');
             current = 'X';

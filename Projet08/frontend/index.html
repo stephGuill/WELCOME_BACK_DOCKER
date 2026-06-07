@@ -53,14 +53,20 @@
     </div>
 
     <script>
+        // Référence à l'élément <pre> qui affiche la réponse JSON
         const output = document.getElementById('output');
+
+        // Au clic sur le bouton, appelle /api/status via Nginx (qui proxyfie vers le backend Node.js)
         document.getElementById('checkBtn').addEventListener('click', async() => {
-            output.textContent = 'Chargement...';
+            output.textContent = 'Chargement...'; // Indicateur de chargement
             try {
+                // fetch('/api/status') → Nginx reçoit /api/ → proxy_pass vers http://backend:3000/api/status
                 const res = await fetch('/api/status');
                 const data = await res.json();
+                // Affiche le JSON indenté (api: ok, database: connected, time: ...)
                 output.textContent = JSON.stringify(data, null, 2);
             } catch (e) {
+                // En cas d'erreur réseau ou API indisponible
                 output.textContent = 'Erreur de connexion API: ' + e.message;
             }
         });

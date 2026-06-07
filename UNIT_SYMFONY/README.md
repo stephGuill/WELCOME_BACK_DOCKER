@@ -176,7 +176,7 @@ Resultat attendu :
 - [OK] The database schema is in sync with the mapping files.
 
 ## 8) Captures d'ecran
-Les captures sont stockees dans : [Screenshot](Screenshot)
+Les captures sont stockées dans : [Screenshot](Screenshot)
 
 Structure :
 - Screenshot/01-setup
@@ -184,6 +184,35 @@ Structure :
 - Screenshot/03-symfony-install
 - Screenshot/04-database
 - Screenshot/05-tests
+
+### Exemples de résultats attendus (maquettes SVG)
+
+#### Page d'accueil (port 8090)
+![Home page](Screenshot/examples/example-05-home-8080.svg)
+
+#### Formulaire de connexion Administrateur
+![Login Admin](Screenshot/examples/example-05-login-admin.svg)
+
+#### Formulaire de connexion Utilisateur
+![Login User](Screenshot/examples/example-05-login-user.svg)
+
+#### Tableau de bord Administrateur
+![Dashboard Admin](Screenshot/examples/example-05-admin-dashboard.svg)
+
+#### Tableau de bord Utilisateur
+![Dashboard User](Screenshot/examples/example-05-user-dashboard.svg)
+
+#### Blocage d'un utilisateur sur la route admin
+![Admin blocked for user](Screenshot/examples/example-05-admin-blocked-for-user.svg)
+
+#### phpMyAdmin (port 8091)
+![phpMyAdmin](Screenshot/examples/example-05-phpmyadmin-8081.svg)
+
+#### Adminer (port 8082)
+![Adminer](Screenshot/examples/example-05-adminer-8082.svg)
+
+#### Preuve de persistance après redémarrage
+![Persistence proof](Screenshot/examples/example-05-persistence-proof.svg)
 
 Consigne rendue :
 - Captures a chaque etape Docker/Symfony

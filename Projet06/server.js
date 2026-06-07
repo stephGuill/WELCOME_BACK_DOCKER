@@ -1,8 +1,12 @@
+// Import du framework Express.js pour créer le serveur HTTP
 const express = require('express');
 
+// Création de l'application Express
 const app = express();
+// Port d'écoute : utilise la variable d'environnement PORT si définie, sinon 3000
 const PORT = process.env.PORT || 3000;
 
+// Tableau de missions Docker affichées aléatoirement dans l'interface
 const missions = [
     'Redémarrer le module Docker Engine',
     'Vérifier le mapping des ports critiques',
@@ -11,16 +15,19 @@ const missions = [
     'Sécuriser la passerelle réseau locale'
 ];
 
+// Route GET /api/health : endpoint de santé du service
+// Renvoie : statut, uptime en secondes, horodatage UTC, RAM utilisée (MB), port mappé
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'OPERATIONAL',
-        uptimeSeconds: Math.floor(process.uptime()),
-        timestamp: new Date().toISOString(),
-        memoryMB: Math.round(process.memoryUsage().rss / 1024 / 1024),
+        uptimeSeconds: Math.floor(process.uptime()),   // secondes depuis le démarrage du process Node
+        timestamp: new Date().toISOString(),            // date/heure au format ISO 8601
+        memoryMB: Math.round(process.memoryUsage().rss / 1024 / 1024), // mémoire résidente en MB
         mappedPort: PORT
     });
 });
 
+// Route GET /api/mission : renvoie une mission aléatoire depuis le tableau missions[]
 app.get('/api/mission', (req, res) => {
     const mission = missions[Math.floor(Math.random() * missions.length)];
     res.json({ mission });
@@ -235,6 +242,7 @@ app.get('/', (req, res) => {
   `);
 });
 
+// Démarrage du serveur : écoute sur PORT et affiche un message de confirmation
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

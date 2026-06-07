@@ -1,65 +1,71 @@
 services:
+  # --- Service 1 : Base de données MySQL 8 ---
   database:
-    image: mysql:8.0
+    image: mysql:8.0                  # image officielle MySQL version 8
     container_name: projet08-database
-    restart: unless-stopped
+    restart: unless-stopped           # redémarre automatiquement sauf arrêt manuel
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: projetdb
+      MYSQL_ROOT_PASSWORD: root       # mot de passe root MySQL
+      MYSQL_DATABASE: projetdb        # base créée automatiquement au démarrage
     expose:
-      - "3306"
+      - "3306"                        # expose le port MySQL uniquement aux autres conteneurs du réseau
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql        # volume nommé pour persister les données entre redémarrages
     networks:
       - appnet
 
+  # --- Service 2 : Backend Node.js / Express ---
   backend:
     build:
-      context: ./backend
+      context: ./backend              # construit l'image depuis le dossier ./backend
     container_name: projet08-backend
     restart: unless-stopped
     environment:
-      DB_HOST: database
+      DB_HOST: database               # nom du service MySQL (résolution DNS interne Docker)
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: projetdb
       PORT: 3000
     ports:
-      - "3000:3000"
+      - "3000:3000"                   # accessible depuis l'hôte sur http://localhost:3000
     depends_on:
-      - database
+      - database                      # attend que le service database soit démarré
     networks:
       - appnet
 
+  # --- Service 3 : Nginx (reverse proxy + fichiers statiques) ---
   nginx:
-    image: nginx:alpine
+    image: nginx:alpine               # image Nginx légère
     container_name: projet08-nginx
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8080:80"                     # frontend accessible sur http://localhost:8080
     volumes:
-      - ./frontend:/usr/share/nginx/html:ro
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro          # fichiers statiques en lecture seule
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro  # config Nginx custom
     depends_on:
       - backend
     networks:
       - appnet
 
+  # --- Service 4 : Adminer (interface web d'administration BDD) ---
   adminer:
     image: adminer:latest
     container_name: projet08-adminer
     restart: unless-stopped
     ports:
-      - "8081:8080"
+      - "8081:8080"                   # interface Adminer sur http://localhost:8081
     depends_on:
       - database
     networks:
       - appnet
 
+# Volume nommé pour persister les données MySQL au-delà du cycle de vie du conteneur
 volumes:
   db_data:
 
+# Réseau bridge interne : permet aux services de communiquer par leur nom (ex: "database", "backend")
 networks:
   appnet:
     driver: bridge

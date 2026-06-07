@@ -83,9 +83,23 @@ URL :
 
 Vous devez voir la page `PHP Version` avec toutes les informations serveur.
 
-Capture :
+Captures :
 
-![Page phpinfo()](./images/01-phpinfo-page.png)
+![phpinfo page 1](./images/Capture%20d'%C3%A9cran%20phpinfo1.png)
+
+![phpinfo page 2](./images/Capture%20d'%C3%A9cran%20phpinfo2.png)
+
+![phpinfo page 3](./images/Capture%20d'%C3%A9cran%20phpinfo3.png)
+
+![phpinfo page 4](./images/Capture%20d'%C3%A9cran%20phpinfo4.png)
+
+![phpinfo page 5](./images/Capture%20d'%C3%A9cran%20phpinfo5.png)
+
+![phpinfo page 6](./images/Capture%20d'%C3%A9cran%20phpinfo6.png)
+
+![phpinfo page 7](./images/Capture%20d'%C3%A9cran%20phpinfo7.png)
+
+![phpinfo page 8](./images/Capture%20d'%C3%A9cran%20phpinfo8.png)
 
 ---
 

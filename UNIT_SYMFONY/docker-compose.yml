@@ -1,4 +1,6 @@
 services:
+  # --- Service 1 : Application Symfony (PHP-FPM 8.2) ---
+  # Construit l'image depuis le Dockerfile local, monte le code source en volume live
   symfony_app:
     build:
       context: .
@@ -6,22 +8,24 @@ services:
     container_name: Symfony_app
     working_dir: /var/www/html
     volumes:
-      - ./app:/var/www/html
+      - ./app:/var/www/html           # monte le dossier app/ local dans le conteneur (rechargement instantané)
     depends_on:
-      - symfony_db
+      - symfony_db                    # attend que la base MySQL soit démarrée
     networks:
       symfony_network:
         aliases:
-          - Symfony_app
+          - Symfony_app               # alias réseau pour que Nginx puisse résoudre "Symfony_app:9000"
 
+  # --- Service 2 : Nginx (serveur web / reverse proxy FastCGI) ---
+  # Sert les fichiers statiques et transmet les requêtes PHP à PHP-FPM via FastCGI
   symfony_nginx:
     image: nginx:alpine
     container_name: Symfony_nginx
     ports:
-      - "8090:80"
+      - "8090:80"                     # application Symfony accessible sur http://localhost:8090
     volumes:
-      - ./app:/var/www/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app:/var/www/html                                          # même code source que PHP-FPM
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro      # config Nginx Symfony custom
     depends_on:
       - symfony_app
     networks:
@@ -29,34 +33,36 @@ services:
         aliases:
           - Symfony_nginx
 
+  # --- Service 3 : Base de données MySQL 8 ---
   symfony_db:
     image: mysql:8.0
     container_name: Symfony_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: Symfony
-      MYSQL_USER: Symfony
-      MYSQL_PASSWORD: Symfony
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Symfony         # nom de la base de données
+      MYSQL_USER: Symfony             # utilisateur applicatif
+      MYSQL_PASSWORD: Symfony         # mot de passe de l'utilisateur applicatif
+      MYSQL_ROOT_PASSWORD: root       # mot de passe root MySQL
     ports:
-      - "3307:3306"
+      - "3307:3306"                   # port 3307 sur l'hôte pour éviter les conflits avec MySQL local
     volumes:
-      - symfony_db_data:/var/lib/mysql
+      - symfony_db_data:/var/lib/mysql  # volume nommé pour persister les données
     networks:
       symfony_network:
         aliases:
-          - Symfony_db
+          - Symfony_db                # alias DNS utilisé dans DATABASE_URL du .env Symfony
 
+  # --- Service 4 : phpMyAdmin (interface web d'administration BDD) ---
   symfony_phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: Symfony_phpmyadmin
     restart: unless-stopped
     environment:
-      PMA_HOST: Symfony_db
+      PMA_HOST: Symfony_db            # nom du service MySQL à administrer
       PMA_USER: root
       PMA_PASSWORD: root
     ports:
-      - "8091:80"
+      - "8091:80"                     # phpMyAdmin accessible sur http://localhost:8091
     depends_on:
       - symfony_db
     networks:
@@ -64,12 +70,13 @@ services:
         aliases:
           - Symfony_phpmyadmin
 
+  # --- Service 5 : Adminer (alternative légère à phpMyAdmin) ---
   symfony_adminer:
     image: adminer:latest
     container_name: Symfony_adminer
     restart: unless-stopped
     ports:
-      - "8082:8080"
+      - "8082:8080"                   # Adminer accessible sur http://localhost:8082
     depends_on:
       - symfony_db
     networks:
@@ -77,9 +84,11 @@ services:
         aliases:
           - Symfony_adminer
 
+# Volume nommé pour la persistance MySQL
 volumes:
   symfony_db_data:
 
+# Réseau bridge dédié : tous les services communiquent entre eux par leur nom de service
 networks:
   symfony_network:
     driver: bridge
