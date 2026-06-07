@@ -1,0 +1,12 @@
+{
+    "name": "projet06-port-mapping",
+    "version": "1.0.0",
+    "description": "Node.js app for Docker port mapping exercise",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "4.19.2"
+    }
+}
