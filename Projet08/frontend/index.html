@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projet08 - Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 24px;
+        }
+        
+        .card {
+            max-width: 760px;
+            margin: auto;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        pre {
+            background: #020617;
+            padding: 12px;
+            border-radius: 8px;
+            overflow: auto;
+        }
+        
+        button {
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>Projet08 - Docker Réseautage</h1>
+        <p>Frontend servi par Nginx. Cliquez pour vérifier l'état de l'API backend.</p>
+        <button id="checkBtn">Vérifier /api/status</button>
+        <h3>Réponse API</h3>
+        <pre id="output">En attente...</pre>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        document.getElementById('checkBtn').addEventListener('click', async() => {
+            output.textContent = 'Chargement...';
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                output.textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                output.textContent = 'Erreur de connexion API: ' + e.message;
+            }
+        });
+    </script>
+</body>
+
+</html>
